@@ -1,18 +1,32 @@
-"use client";
+// "use client";
 
-import BackButton from '@/app/components/BackButton';
+import BackButton from "@/app/components/BackButton";
 import { Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
+import { db } from "@/app/lib/db";
 
-function BlogPostDetails({ params }) {
+async function BlogPostDetails({ params }) {
   const blogId = params.blogId;
+  const post = await db.post.findUnique({
+    where: { id: parseInt(blogId) },
+    select: {
+      id: true,
+      title: true,
+      content: true,
+      tag: true,
+    },
+  });
+  console.log(post);
   return (
     <div className="mt-14">
-        <BackButton />
+      <BackButton />
       <h1 className="text-2xl font-bold mt-5">Post Details:</h1>
-      <div className="mt-5">
+      {/* <div className="mt-5">
         <div className="flex gap-4">
-          <Link href={`/blog/editPost/${blogId}`} className="flex items-center btn">
+          <Link
+            href={`/blog/editPost/${blogId}`}
+            className="flex items-center btn"
+          >
             <Pencil />
             Edit
           </Link>
@@ -37,13 +51,22 @@ function BlogPostDetails({ params }) {
               </form>
             </div>
           </div>
+
+          <form method="dialog" className="modal-backdrop">
+            <button>close</button>
+          </form>
         </dialog>
-      </div>
+      </div> */}
 
       <div className="max-w-4xl mx-auto py-8">
-        <h1 className="text-3xl font-bold">TITLE</h1>
-        <p>Written by: XXXXXX</p>
-        <div className="mt-4">CONTENT</div>
+        <h1 className="text-3xl font-bold">{post.title}</h1>
+        <div className="mt-4">CONTENT: {post.content}</div>
+        <div className="mt-4">
+          <span>TAG:</span>
+          <span className="badge badge-accent badge-outline ml-3">
+            {post.tag.name}
+          </span>
+        </div>
       </div>
     </div>
   );
