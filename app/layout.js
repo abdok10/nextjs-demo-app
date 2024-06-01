@@ -20,7 +20,7 @@ export default function RootLayout({ children }) {
             </Link>
             <div className="mr-20 flex gap-5">
               <Link href="/posts">Posts</Link>
-              <Link href="/articles">Articles</Link>
+              <Link href="/products">Products</Link>
               <Link href="/features">Features</Link>
             </div>
           </nav>

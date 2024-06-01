@@ -6,9 +6,8 @@ async function ShowPost({ params }) {
 
   const loadingJsx = (
     <div className="flex justify-center">
-      <p className="text-2xl text-cyan-500 font-bold">Loading...</p>
-    </div>
-  );
+      <p className="text-2xl text-cyan-500 font">Loading...</p>
+    </div>)
 
   return (
     <div>
