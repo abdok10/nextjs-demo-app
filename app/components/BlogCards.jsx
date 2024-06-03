@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 function BlogCards({ post }) {
-  const { title, content, tag } = post;
+  const { id, title, content, tag } = post;
   return (
     <>
       <div className="card w-full bg-base-100 shadow-xl">
@@ -12,7 +12,7 @@ function BlogCards({ post }) {
             <span className="badge badge-outline">{tag.name}</span>
             <div className="card-actions ">
               <Link
-                href={`/blog/${post.id}`}
+                href={`/blog/${id}`}
                 className="btn btn-primary btn-sm mt-4"
               >
                 read more..

@@ -2,16 +2,21 @@ import BlogCards from "@/app/components/BlogCards";
 import Link from "next/link";
 import { db } from "@/app/lib/db";
 
-export default async function BlogPage() {
-  const posts = await db.post.findMany({
+const getPosts = async () => {
+  const response = await db.post.findMany({
     select: {
         id: true,
         title: true,
         content: true,
         tag: true,
     },
-    orderBy: { id: "desc" },
+    orderBy: { createdAt: "desc" },
   });
+  return response;
+}
+
+export default async function BlogPage() {
+  const posts = await getPosts();
   console.log(posts);
 
   return (
