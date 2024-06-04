@@ -2,8 +2,25 @@
 
 import { Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
+import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import axios from "axios";
 
 function ButtonAction({ blogId }) {
+  const router = useRouter();
+
+  const { mutate: deletePost, isPending: isDeleting } = useMutation({
+    mutationFn: async () => {
+      return axios.delete(`/api/posts/${blogId}`);
+    },
+    onSuccess: () => {
+      router.push("/blog");
+      router.refresh();
+    },
+    onError: (error) => {
+      console.error(error);
+    },
+  });
   return (
     <div className="mt-5">
       <div className="flex gap-4">
@@ -16,10 +33,21 @@ function ButtonAction({ blogId }) {
         </Link>
         <button
           className="btn btn-error"
+          // onClick={deletePost}
           onClick={() => document.getElementById("deleteModal").showModal()}
         >
-          <Trash2 />
-          Delete
+          {isDeleting ? (
+            <>
+              <span className="loading"></span>
+              <span>Deleting...</span>
+            </>
+          ) : (
+            <>
+              <Trash2 />
+              Delete
+            </>
+          )}
+
         </button>
       </div>
       <dialog id="deleteModal" className="modal">
@@ -31,7 +59,9 @@ function ButtonAction({ blogId }) {
               <button className="btn">NO</button>
             </form>
             <form method="dialog">
-              <button className="btn btn-error">YES</button>
+              <button onClick={deletePost} className="btn btn-error">
+                YES
+              </button>
             </form>
           </div>
         </div>

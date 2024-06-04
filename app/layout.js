@@ -2,6 +2,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/Navbar";
 import Providers from "./components/Providers";
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,6 +18,7 @@ export default function RootLayout({ children }) {
         <Providers>
           <Navbar />
           <div className="container min-h-screen">{children}</div>
+          <ReactQueryDevtools initialIsOpen={false} />
         </Providers>
       </body>
     </html>

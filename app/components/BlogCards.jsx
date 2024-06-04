@@ -15,7 +15,7 @@ function BlogCards({ post }) {
                 href={`/blog/${id}`}
                 className="btn btn-primary btn-sm mt-4"
               >
-                read more..
+                read more
               </Link>
             </div>
           </div>

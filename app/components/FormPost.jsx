@@ -3,9 +3,11 @@ import { useForm } from "react-hook-form";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
-function FormPost({ post }) {
-  const { register, handleSubmit, isEditing } = useForm();
-  
+function FormPost({ post, submit, isEditing, isLoadingSubmit }) {
+  const { register, handleSubmit } = useForm({
+    defaultValues: post,
+  });
+
   const { data: tags, isLoading: isLoadingTags } = useQuery({
     queryKey: ["tags"],
     queryFn: async () => {
@@ -16,13 +18,13 @@ function FormPost({ post }) {
 
   const onSubmit = (data) => {
     console.log(data);
+    submit(data);
     if (isEditing) {
-      console.log("Editing...")
+      console.log("Editing...");
     } else {
-      // console.log("Creating...")
-      
+      console.log("Creating...");
     }
-  }
+  };
 
   return (
     <form
@@ -31,7 +33,6 @@ function FormPost({ post }) {
     >
       <input
         {...register("title", { required: true, maxLength: 20, minLength: 5 })}
-        value={post?.title}
         type="text"
         placeholder="Post Title.."
         className="input input-bordered w-full max-w-lg"
@@ -40,10 +41,8 @@ function FormPost({ post }) {
       <textarea
         {...register("content", {
           required: true,
-          maxLength: 20,
           minLength: 5,
         })}
-        value={post?.content}
         className="textarea textarea-bordered w-full max-w-lg"
         placeholder="Post Content.."
       ></textarea>
@@ -56,24 +55,38 @@ function FormPost({ post }) {
         </>
       ) : (
         <select
-          {...register("tag", { required: true })}
+          {...register("tagId", { required: true })}
           className="select select-bordered w-full max-w-lg"
-          defaultValue=''
+          defaultValue=""
         >
           <option disabled value="">
             Select Tags
           </option>
           {tags.map((tag) => (
-            <option key={tag.id}>{tag.name}</option>
+            <option key={tag.id} value={tag.id}>
+              {tag.name}
+            </option>
           ))}
         </select>
       )}
 
-      <input
+      {/* <input
         type="submit"
         value={post ? "Edit" : "Create"}
         className="btn btn-primary w-full max-w-lg"
-      />
+      /> */}
+      <button type="submit" className="btn btn-primary w-full max-w-lg">
+        {isLoadingSubmit ? (
+          <>
+            <span className="loading loading-spinner"></span>
+            <span>{isEditing ? "Editing.." : "Creating.."}</span>
+          </>
+        ) : isEditing ? (
+          "Edit"
+        ) : (
+          "Create"
+        )}
+      </button>
     </form>
   );
 }
